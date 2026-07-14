@@ -119,3 +119,7 @@ files are content-hashed, so those are cached for a year.
 
 All ten songs are public domain (Beethoven, folk tunes) or written for this app.
 Nothing here needs a licence.
+
+---
+
+Live: https://piano-quest-wine.vercel.app (auto-deploys from this branch via Vercel).
