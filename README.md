@@ -100,7 +100,7 @@ a developer account, and a different piece of work. Say the word and I'll do it.
 ## What's in here
 
 ```
-src/PianoQuest.jsx   the whole app — 28 lessons, 10 songs, the synth, the engines
+src/PianoQuest.jsx   the whole app — 33 lessons, 13 songs, the synth, the engines
 src/main.jsx         entry point, service worker registration, zoom suppression
 public/index.html    the shell, with the iOS meta tags that make install work
 public/sw.js         service worker — caches everything so it runs offline
@@ -117,7 +117,7 @@ if the service worker gets cached by the CDN, the iPad will keep running an old
 copy of the app **forever**, and no amount of redeploying will fix it. The font
 files are content-hashed, so those are cached for a year.
 
-All ten songs are public domain (Beethoven, folk tunes) or written for this app.
+All songs are public domain (Beethoven, folk tunes) or written for this app.
 Nothing here needs a licence.
 
 ---

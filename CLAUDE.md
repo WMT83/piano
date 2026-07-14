@@ -1,7 +1,7 @@
 # Piano Quest — working notes for Claude
 
 A gamified piano course for a 9-year-old beginner, installed on an iPad as a PWA.
-Modelled on Playground Sessions. 28 lessons, 3 levels, 10 songs.
+Modelled on Playground Sessions. 33 lessons, 3 levels, 13 songs.
 
 ## Layout
 - `src/PianoQuest.jsx` — the entire app: songs, curriculum, WebAudio synth, input,

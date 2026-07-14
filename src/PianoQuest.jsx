@@ -222,6 +222,38 @@ const SONGS = {
       n(24, 69, 3), n(24, 45, 1, "L"), n(25, 52, 1, "L"), n(26, 57, 1, "L"),
     ],
   },
+  auclair: {
+    title: "Au Clair de la Lune", bpm: 96, ts: 4, range: [60, 72], hands: "R",
+    blurb: "A gentle French tune. Three notes, stepping up and down.",
+    notes: [
+      n(0, 60), n(1, 60), n(2, 60), n(3, 62),
+      n(4, 64, 2), n(6, 62, 2),
+      n(8, 60), n(9, 64), n(10, 62), n(11, 62),
+      n(12, 60, 4),
+    ],
+  },
+  hotCrossLeft: {
+    title: "Hot Cross Buns — Left Hand", bpm: 68, ts: 4, range: [48, 60], hands: "B",
+    blurb: "The tune you already know — now with your left hand, lower down.",
+    notes: [
+      n(0, 52, 1, "L"), n(1, 50, 1, "L"), n(2, 48, 2, "L"),
+      n(4, 52, 1, "L"), n(5, 50, 1, "L"), n(6, 48, 2, "L"),
+      n(8, 48, .5, "L"), n(8.5, 48, .5, "L"), n(9, 48, .5, "L"), n(9.5, 48, .5, "L"),
+      n(10, 50, .5, "L"), n(10.5, 50, .5, "L"), n(11, 50, .5, "L"), n(11.5, 50, .5, "L"),
+      n(12, 52, 1, "L"), n(13, 50, 1, "L"), n(14, 48, 2, "L"),
+    ],
+  },
+  firstDuet: {
+    title: "Both Hands Warm-Up", bpm: 80, ts: 4, range: [48, 72], hands: "B",
+    blurb: "Right hand walks up and back. Left hand holds one note underneath.",
+    notes: [
+      n(0, 60), n(1, 62), n(2, 64), n(3, 65),
+      n(4, 67, 4),
+      n(8, 65), n(9, 64), n(10, 62), n(11, 60),
+      n(12, 60, 4),
+      n(0, 48, 4, "L"), n(4, 55, 4, "L"), n(8, 48, 4, "L"), n(12, 48, 4, "L"),
+    ],
+  },
 };
 
 /* ---------- CURRICULUM ---------- */
@@ -254,6 +286,15 @@ const LESSONS = [
     find: { prompt: "Play C, D, E, F, G in order", targets: [60, 62, 64, 65, 67], ordered: true, range: [60, 72] },
   },
   {
+    id: "rh-warmup", lvl: 1, title: "Five-Finger Warm-Up", xp: 20, kind: "find",
+    concept: {
+      big: "Up 1-2-3-4-5, then back down 5-4-3-2-1.",
+      body: "Rest your right hand in C position, thumb on middle C. Play up to G one finger at a time, then walk all the way back down to C. Same five keys, no jumping around.",
+      points: ["Up: C D E F G", "Down: G F E D C", "One finger per key, the hand stays put"],
+    },
+    find: { prompt: "Play up C-D-E-F-G, then back down to C", targets: [60, 62, 64, 65, 67, 65, 64, 62, 60], ordered: true, range: [60, 72] },
+  },
+  {
     id: "steady-beat", lvl: 1, title: "The Steady Beat", xp: 25, kind: "rhythm",
     concept: {
       big: "Music has a heartbeat. Yours has to match it.",
@@ -273,6 +314,7 @@ const LESSONS = [
     read: { clef: "treble", pool: [60, 62, 64, 65, 67], rounds: 8, range: [60, 72] },
   },
   { id: "song-mary", lvl: 1, title: "Mary Had a Little Lamb", xp: 40, kind: "song", song: "mary" },
+  { id: "song-auclair", lvl: 1, title: "Au Clair de la Lune", xp: 45, kind: "song", song: "auclair" },
   {
     id: "note-values", lvl: 1, title: "Half Notes & Whole Notes", xp: 25, kind: "concept",
     concept: {
@@ -293,6 +335,16 @@ const LESSONS = [
     },
     read: { clef: "bass", pool: [48, 50, 52, 53, 55], rounds: 8, range: [48, 60] },
   },
+  {
+    id: "lh-position", lvl: 2, title: "C Position, Left Hand", xp: 25, kind: "find",
+    concept: {
+      big: "Left hand now. Pinky on C, thumb on G.",
+      body: "Your left hand is a mirror of your right. Put your LEFT pinky (5) on the C below middle C; your thumb (1) lands on G. Play up: C-D-E-F-G.",
+      points: ["Left pinky (5) on C, thumb (1) on G", "The same five white keys, one octave lower", "The two hands mirror each other"],
+    },
+    find: { prompt: "Play C, D, E, F, G with your LEFT hand", targets: [48, 50, 52, 53, 55], ordered: true, range: [48, 60] },
+  },
+  { id: "song-hotcross-lh", lvl: 2, title: "Hot Cross Buns, Left Hand", xp: 45, kind: "song", song: "hotCrossLeft" },
   {
     id: "hand-shift", lvl: 2, title: "Moving Your Hand", xp: 30, kind: "concept",
     concept: {
@@ -338,6 +390,7 @@ const LESSONS = [
     },
     find: { prompt: "Play the F chord \u2014 C, F and A together", targets: [48, 53, 57], together: true, range: [48, 60] },
   },
+  { id: "song-firstduet", lvl: 2, title: "Both Hands Warm-Up", xp: 50, kind: "song", song: "firstDuet" },
   { id: "song-twinkle", lvl: 2, title: "Twinkle, Twinkle, Little Star", xp: 60, kind: "song", song: "twinkle" },
   { id: "song-saints", lvl: 2, title: "When the Saints Go Marching In", xp: 55, kind: "song", song: "saints" },
   { id: "song-odeht", lvl: 2, title: "Ode to Joy, Hands Together", xp: 60, kind: "song", song: "odeHT" },
