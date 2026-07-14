@@ -1,6 +1,6 @@
 /* Cache everything on install, then serve from cache first.
    Result: after one visit, Piano Quest opens with no internet at all. */
-const CACHE = "piano-quest-v1";
+const CACHE = "piano-quest-__BUILD_ID__";
 const ASSETS = [
   "./", "./index.html", "./app.js", "./fonts.css",
   "./manifest.webmanifest",
