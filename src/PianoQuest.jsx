@@ -9,17 +9,18 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 
 /* ---------- DESIGN TOKENS ---------- */
 const T = {
-  ink: "#1B1327",
-  velvet: "#241832",
-  panel: "#2E2042",
-  raised: "#3C2B55",
-  line: "#4A3765",
+  ink: "#28101E",
+  velvet: "#38182E",
+  panel: "#46203A",
+  raised: "#5A2A49",
+  line: "#743C60",
   brass: "#E8B04B",
   ribbon: "#FF5D8F",
   mint: "#4FD1A0",
   ivory: "#F4EDE4",
-  muted: "#A292B8",
+  muted: "#C39BB6",
   danger: "#F2704B",
+  pink: "#FF7BB0",
 };
 const RH = T.brass;   // right hand
 const LH = T.ribbon;  // left hand
@@ -842,7 +843,7 @@ function Highway({ notes, beat, lo, hi, hits, ts = 4, height = 230, pxPerBeat = 
 /* ---------- UI BITS ---------- */
 const Btn = ({ children, onClick, variant = "primary", disabled, style }) => {
   const v = {
-    primary: { bg: T.brass, fg: "#241804", sh: "#9c7526" },
+    primary: { bg: T.pink, fg: "#3a0d1e", sh: "#b45683" },
     pink: { bg: T.ribbon, fg: "#3a0d1e", sh: "#a13358" },
     dark: { bg: T.raised, fg: T.ivory, sh: "#211630" },
     ghost: { bg: "transparent", fg: T.ivory, sh: "transparent" },
@@ -1803,7 +1804,8 @@ export default function PianoQuest() {
       <div style={{ maxWidth: 1040, margin: "0 auto", padding: "18px 20px 70px" }}>
         <header style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 190 }}>
-            <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: T.brass, letterSpacing: 3 }}>PIANO QUEST</div>
+            <div style={{ fontFamily: "'Poppins','Baloo 2',system-ui,sans-serif", fontWeight: 800, fontSize: 24, color: T.pink, letterSpacing: 0.5, lineHeight: 1.05 }}>Ané</div>
+            <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: T.brass, letterSpacing: 3, marginTop: 2 }}>PIANO QUEST</div>
             <div style={{ fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 15, color: T.muted }}>
               {doneCount === 0 ? "Start at the first note." : `${doneCount} of ${LESSONS.length} lessons cleared`}
             </div>
@@ -1869,7 +1871,7 @@ export default function PianoQuest() {
 
       {portrait && (view.name === "lesson" || view.name === "free") && (
         <div style={{
-          position: "fixed", inset: 0, background: "rgba(27,19,39,.97)", zIndex: 80,
+          position: "fixed", inset: 0, background: "rgba(40,16,30,.97)", zIndex: 80,
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           gap: 14, padding: 30, textAlign: "center",
         }}>
@@ -1884,10 +1886,11 @@ export default function PianoQuest() {
       {!awake && (
         <div onPointerDown={() => { audio.wake(); setAwake(true); }}
           style={{
-            position: "fixed", inset: 0, background: "rgba(27,19,39,.92)", zIndex: 90,
+            position: "fixed", inset: 0, background: "rgba(40,16,30,.94)", zIndex: 90,
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
             gap: 12, cursor: "pointer", textAlign: "center", padding: 30,
           }}>
+          <div style={{ fontFamily: "'Poppins','Baloo 2',system-ui,sans-serif", fontWeight: 800, fontSize: 68, color: T.pink, letterSpacing: 1, lineHeight: 1 }}>Ané</div>
           <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, color: T.brass, letterSpacing: 4 }}>PIANO QUEST</div>
           <div style={{ fontSize: 56 }}>{"\u{1F3B9}"}</div>
           <div style={{ fontFamily: "'Baloo 2'", fontWeight: 800, fontSize: 26, color: T.ivory }}>Tap anywhere to begin</div>

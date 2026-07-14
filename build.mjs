@@ -6,7 +6,7 @@ import { createHash } from "crypto";
 import path from "path";
 
 const OUT = "dist";
-const FONT_CSS = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap";
+const FONT_CSS = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700&family=DM+Mono:wght@400;500&family=Poppins:wght@600;700;800&display=swap";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36";
 
 await fs.rm(OUT, { recursive: true, force: true });
