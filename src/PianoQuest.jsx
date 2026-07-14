@@ -1423,6 +1423,12 @@ function RhythmDrill({ lesson, audio, register, onComplete, onExit }) {
   return (
     <div>
       <ConceptBlock lesson={lesson} onExit={onExit} />
+      {/* The whole drill card is a tap target: on iPad there is no space bar,
+         so she taps the beat with a finger. Space bar still works on desktop. */}
+      <div
+        onPointerDown={running ? (e) => { e.preventDefault(); tap(); } : undefined}
+        style={{ touchAction: "manipulation", cursor: running ? "pointer" : "default" }}
+      >
       <Card style={{ textAlign: "center" }}>
         <div style={{
           width: 130, height: 130, borderRadius: "50%", margin: "6px auto 16px",
@@ -1446,7 +1452,7 @@ function RhythmDrill({ lesson, audio, register, onComplete, onExit }) {
         {!running && !done && <Btn onClick={start}>Start the metronome</Btn>}
         {running && (
           <div style={{ color: T.mint, fontFamily: "'Baloo 2'", fontWeight: 700 }}>
-            {beat < 0 ? "Counting you in\u2026" : `Tap the space bar on every ${sub === 2 ? "half-beat" : "beat"}`}
+            {beat < 0 ? "Counting you in\u2026" : `Tap anywhere on every ${sub === 2 ? "half-beat" : "beat"}`}
           </div>
         )}
         {done && (
@@ -1463,6 +1469,7 @@ function RhythmDrill({ lesson, audio, register, onComplete, onExit }) {
           </div>
         )}
       </Card>
+      </div>
     </div>
   );
 }
