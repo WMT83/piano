@@ -1,11 +1,12 @@
 # Piano Quest — working notes for Claude
 
 A gamified piano course for a 9-year-old beginner, installed on an iPad as a PWA.
-Modelled on Playground Sessions. 33 lessons, 3 levels, 13 songs.
+Modelled on Playground Sessions. 38 lessons, 3 levels, 13 songs.
 
 ## Layout
 - `src/PianoQuest.jsx` — the entire app: songs, curriculum, WebAudio synth, input,
-  progress store, and six lesson engines (song / read / find / rhythm / improv / concept).
+  progress store, and seven lesson engines
+  (guided / song / read / find / rhythm / improv / concept).
 - `src/main.jsx` — entry, service-worker registration, double-tap-zoom suppression.
 - `public/` — shell, manifest, `sw.js`, icons. `build.mjs` — bundles and self-hosts fonts.
 - `vercel.json` — build config + cache headers. `dist/` — build output, do not edit.
@@ -30,6 +31,29 @@ npx vercel --prod                # deploy
    Claude artifact sandbox).
 6. **Touch: `touch-action: none`** on piano keys, pointer events, `setPointerCapture`.
    Multi-touch chords depend on this.
+
+## The tutor (Wren) and guided lessons
+
+`kind: "guided"` lessons are led by **Wren**, a scripted songbird tutor. She is
+NOT an LLM — deliberately. A guided lesson is a `guide.steps` array; the engine
+walks them, reacting to what the child actually plays.
+
+Step shape: `{ tell, want, good, bad }`.
+- `want.type`: `"none"` (talk, advances on Next) | `"any"` | `"count"` (n presses)
+  | `"note"` (exact midi, optional `n` for repeats) | `"notes"` (ordered midis)
+  | `"region"` (any key in lo..hi, n times).
+- On a wrong note, `directionHint()` tells her which way to move ("That was D.
+  We want C — a little to the left."). This is the heart of the tutor; keep it.
+- Guided lessons always award 3 stars on completion — they are participation,
+  never graded. She must never fail one.
+
+`useSpeech()` reads each `tell`/`good` aloud via the Web Speech API (offline,
+free, works on iPad). It is muted via a toggle in Wren's speech bubble and the
+preference persists in `localStorage` under `pq:speech`. Speech is a bonus layer:
+the text is ALWAYS shown, so a muted app loses nothing essential. Emoji/arrows
+are stripped before speaking.
+
+New-note targets in a guided step must be inside `[guide.lo, guide.hi]`.
 
 ## Song data invariants
 Notes are `n(beat, midi, duration, hand)`; `hand` is `"R"` or `"L"`.

@@ -259,6 +259,104 @@ const SONGS = {
 /* ---------- CURRICULUM ---------- */
 const LESSONS = [
   /* ===== LEVEL 1 — ROOKIE ===== */
+  /* --- guided warm-ups with Wren, the tutor --- */
+  {
+    id: "meet-wren", lvl: 1, title: "Say Hello to Wren", xp: 12, kind: "guided",
+    guide: {
+      lo: 48, hi: 72, labels: false,
+      outro: "See? The piano just waits for you. Come back any time and I'll teach you more.",
+      steps: [
+        { tell: "Hi! I'm Wren, and I'm going to help you learn the piano. This is going to be so much fun." },
+        { tell: "Let's make our very first sound together. Press ANY key you like — go on, try it!",
+          want: { type: "any" }, good: "Ooh, lovely! You just played your first note." },
+        { tell: "Now press a few more keys. Any ones at all. Let's fill the room with sound!",
+          want: { type: "count", n: 5 }, good: "Wonderful! You're playing already." },
+      ],
+    },
+  },
+  {
+    id: "high-low", lvl: 1, title: "High and Low", xp: 12, kind: "guided",
+    guide: {
+      lo: 48, hi: 84, labels: false,
+      outro: "Low sounds live on the left, high sounds live on the right. You've got it!",
+      steps: [
+        { tell: "The piano has low sounds and high sounds. Let's go and find them both." },
+        { tell: "The keys over on the LEFT are low and rumbly, like a big friendly bear. Press one of the glowing keys on the left.",
+          want: { type: "region", lo: 48, hi: 55, n: 2 }, good: "Hear how low and growly that is?" },
+        { tell: "The keys over on the RIGHT are high and sparkly, like tiny bells. Press one of the glowing keys on the right.",
+          want: { type: "region", lo: 76, hi: 84, n: 2 }, good: "So high and twinkly!" },
+      ],
+    },
+  },
+  {
+    id: "black-groups", lvl: 1, title: "The Secret Pattern", xp: 15, kind: "guided",
+    guide: {
+      lo: 54, hi: 72, labels: false,
+      outro: "Every piano in the whole world has this same pattern. Now you can never get lost!",
+      steps: [
+        { tell: "Look at the black keys. They come in little groups — some groups of TWO, some groups of THREE. Can you spot them?" },
+        { tell: "Here's a group of TWO black keys, glowing for you. Press them both, one then the other.",
+          want: { type: "notes", midis: [61, 63] }, good: "That's a group of two!" },
+        { tell: "And here's a group of THREE. Press all three, going left to right.",
+          want: { type: "notes", midis: [66, 68, 70] }, good: "A group of three! You found the secret map of the piano." },
+      ],
+    },
+  },
+  {
+    id: "meet-middle-c", lvl: 1, title: "Meet Middle C", xp: 15, kind: "guided",
+    guide: {
+      lo: 55, hi: 72,
+      outro: "Middle C is where so many songs begin. Your fingers will always know the way home now.",
+      steps: [
+        { tell: "There's one special key called Middle C. It's your home base on the piano. Let me show you where it hides." },
+        { tell: "Find the group of TWO black keys in the middle. The white key just to their LEFT is Middle C — it's glowing. Press it!",
+          want: { type: "note", midi: 60 }, good: "That's Middle C! Give it a little wave." },
+        { tell: "Let's press Middle C three more times, so your finger really remembers where it lives.",
+          want: { type: "note", midi: 60, n: 3 }, good: "Now you'll always find your way home." },
+      ],
+    },
+  },
+  {
+    id: "five-fingers", lvl: 1, title: "Your Five Fingers", xp: 18, kind: "guided",
+    guide: {
+      lo: 60, hi: 72,
+      outro: "That cosy spot is called C Position. Loads of songs live right here under your five fingers.",
+      steps: [
+        { tell: "Now let's use all five fingers on your right hand, one at a time. Curve them like you're holding a bubble." },
+        { tell: "Put your THUMB on Middle C and press it. Your thumb is finger number 1.",
+          want: { type: "note", midi: 60 }, good: "Finger 1 — that's C!" },
+        { tell: "Finger 2 goes on the next white key, D. Press it.",
+          want: { type: "note", midi: 62 }, good: "Finger 2 — D!" },
+        { tell: "Finger 3, your middle finger, on E.",
+          want: { type: "note", midi: 64 }, good: "Finger 3 — E!" },
+        { tell: "Finger 4 on F. This one's a bit lazy — give it a good press.",
+          want: { type: "note", midi: 65 }, good: "Finger 4 — F!" },
+        { tell: "And your pinky, finger 5, on G.",
+          want: { type: "note", midi: 67 }, good: "Finger 5 — G! High five!" },
+        { tell: "Now play all five going up, one after another: C, D, E, F, G.",
+          want: { type: "notes", midis: [60, 62, 64, 65, 67] }, good: "Five notes in a row — that was brilliant!" },
+      ],
+    },
+  },
+  {
+    id: "first-steps", lvl: 1, title: "Your First Little Tune", xp: 18, kind: "guided",
+    guide: {
+      lo: 60, hi: 72,
+      outro: "You just played the beginning of Hot Cross Buns! Ready to learn the whole song next?",
+      steps: [
+        { tell: "Let's play a tiny tune with just three notes: E, D, C. We're walking downstairs, one step at a time." },
+        { tell: "Start on E with finger 3.",
+          want: { type: "note", midi: 64 }, good: "E!" },
+        { tell: "Step down to D with finger 2.",
+          want: { type: "note", midi: 62 }, good: "D!" },
+        { tell: "And down to C with finger 1. That's home!",
+          want: { type: "note", midi: 60 }, good: "C — you made it home!" },
+        { tell: "Now play all three, smooth and gentle: E, D, C.",
+          want: { type: "notes", midis: [64, 62, 60] }, good: "That's the start of a real song!" },
+      ],
+    },
+  },
+
   {
     id: "keyboard-map", lvl: 1, title: "The Keyboard Map", xp: 20, kind: "find",
     concept: {
@@ -284,15 +382,6 @@ const LESSONS = [
       points: ["Thumb (1) on middle C", "One finger per white key: C D E F G", "Fingers stay on their keys, even when they're resting"],
     },
     find: { prompt: "Play C, D, E, F, G in order", targets: [60, 62, 64, 65, 67], ordered: true, range: [60, 72] },
-  },
-  {
-    id: "rh-warmup", lvl: 1, title: "Five-Finger Warm-Up", xp: 20, kind: "find",
-    concept: {
-      big: "Up 1-2-3-4-5, then back down 5-4-3-2-1.",
-      body: "Rest your right hand in C position, thumb on middle C. Play up to G one finger at a time, then walk all the way back down to C. Same five keys, no jumping around.",
-      points: ["Up: C D E F G", "Down: G F E D C", "One finger per key, the hand stays put"],
-    },
-    find: { prompt: "Play up C-D-E-F-G, then back down to C", targets: [60, 62, 64, 65, 67, 65, 64, 62, 60], ordered: true, range: [60, 72] },
   },
   {
     id: "steady-beat", lvl: 1, title: "The Steady Beat", xp: 25, kind: "rhythm",
@@ -458,7 +547,9 @@ const LEVELS = [
   { n: 2, name: "Player", tag: "Both hands", color: T.brass },
   { n: 3, name: "Virtuoso", tag: "Real repertoire", color: T.ribbon },
 ];
-const ICON = { concept: "\u{1F4A1}", song: "\u{1F3B5}", read: "\u{1F441}", find: "\u{1F50E}", rhythm: "\u{1F941}", improv: "\u{1F3BA}" };
+const ICON = { concept: "\u{1F4A1}", song: "\u{1F3B5}", read: "\u{1F441}", find: "\u{1F50E}", rhythm: "\u{1F941}", improv: "\u{1F3BA}", guided: "\u{1F426}" };
+const PRAISE = ["Beautiful playing!", "You are getting so good!", "I knew you could do it!",
+  "That sounded lovely!", "High five!", "You are a real musician now!", "Wonderful work!"];
 
 /* ---------- AUDIO ---------- */
 function useAudio() {
@@ -1625,6 +1716,256 @@ function ConceptLesson({ lesson, pressed, press, release, register, onComplete, 
   );
 }
 
+/* ---------- VIRTUAL TUTOR: WREN ---------- */
+/* A scripted coach, not an LLM: fully offline, free, and safe for a child.
+   She reacts to what actually gets played and never says anything unplanned. */
+
+function WrenAvatar({ mood = "idle", size = 62 }) {
+  const happy = mood === "happy" || mood === "cheer";
+  const oops = mood === "oops";
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true" style={{ display: "block", overflow: "visible" }}>
+      <path d="M22 62 Q6 66 4 78 Q18 74 26 70 Z" fill="#c9963c" />
+      <ellipse cx="54" cy="56" rx="30" ry="27" fill={T.brass} />
+      <ellipse cx="50" cy="62" rx="18" ry="16" fill="#f7d692" />
+      <path d="M60 46 Q80 50 74 68 Q62 64 58 54 Z" fill="#c9963c" />
+      <circle cx="66" cy="34" r="20" fill={T.brass} />
+      <path d="M63 15 Q67 5 74 12 Q69 14 70 21 Z" fill="#c9963c" />
+      {happy
+        ? <path d="M67 33 Q72 27 77 33" stroke="#1B1327" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+        : <>
+            <circle cx="72" cy="32" r={oops ? 3 : 4} fill="#1B1327" />
+            {!oops && <circle cx="73.5" cy="30.5" r="1.4" fill="#fff" />}
+          </>}
+      {oops && <path d="M67 26 Q72 24 76 27" stroke="#1B1327" strokeWidth="2" fill="none" strokeLinecap="round" />}
+      <path d={oops ? "M84 37 L95 35 L84 41 Z" : "M84 33 L96 36 L84 39 Z"} fill={T.ribbon} />
+      {happy && (
+        <g fill={T.mint}>
+          <circle cx="13" cy="32" r="4.2" />
+          <rect x="16" y="17" width="2.6" height="16" />
+          <path d="M16 17 Q24 18 22.6 24 L16 23 Z" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
+function useSpeech() {
+  const [on, setOn] = useState(() => {
+    try { return localStorage.getItem("pq:speech") !== "off"; } catch (e) { return true; }
+  });
+  const voiceRef = useRef(null);
+  useEffect(() => {
+    if (!("speechSynthesis" in window)) return;
+    const pick = () => {
+      const vs = window.speechSynthesis.getVoices();
+      voiceRef.current =
+        vs.find((v) => /en/i.test(v.lang) && /(Samantha|Karen|Moira|Tessa|Serena|Fiona|female|Google UK English Female)/i.test(v.name)) ||
+        vs.find((v) => /^en[-_]/i.test(v.lang)) || vs[0] || null;
+    };
+    pick();
+    try { window.speechSynthesis.onvoiceschanged = pick; } catch (e) {}
+    return () => { try { window.speechSynthesis.onvoiceschanged = null; } catch (e) {} };
+  }, []);
+  const say = useCallback((text) => {
+    if (!on || !text || !("speechSynthesis" in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const clean = text.replace(/[\u2190-\u21FF\u2600-\u27BF\u{1F000}-\u{1FAFF}]/gu, "").trim();
+      if (!clean) return;
+      const u = new SpeechSynthesisUtterance(clean);
+      if (voiceRef.current) u.voice = voiceRef.current;
+      u.rate = 0.95; u.pitch = 1.15; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }, [on]);
+  const toggle = useCallback(() => {
+    setOn((v) => {
+      const nv = !v;
+      try { localStorage.setItem("pq:speech", nv ? "on" : "off"); } catch (e) {}
+      if (!nv && "speechSynthesis" in window) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      return nv;
+    });
+  }, []);
+  return { on, say, toggle };
+}
+
+function Tutor({ text, mood = "idle", speech }) {
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 12, marginBottom: 16 }}>
+      <div style={{
+        flex: "0 0 auto", width: 78, height: 78, borderRadius: "50%",
+        background: T.velvet, border: `2px solid ${T.line}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <WrenAvatar mood={mood} size={64} />
+      </div>
+      <div style={{
+        position: "relative", flex: 1, background: T.raised, border: `1.5px solid ${T.line}`,
+        borderRadius: "4px 15px 15px 15px", padding: "12px 15px", minHeight: 46,
+      }}>
+        {speech && (
+          <button onClick={speech.toggle} title={speech.on ? "Mute Wren" : "Let Wren speak"}
+            style={{ position: "absolute", top: 7, right: 9, background: "none", border: "none", cursor: "pointer", fontSize: 15, opacity: .75 }}>
+            {speech.on ? "\u{1F50A}" : "\u{1F507}"}
+          </button>
+        )}
+        <div style={{ fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 12, color: T.brass, letterSpacing: 1, marginBottom: 2 }}>WREN</div>
+        <div style={{ fontFamily: "'Nunito Sans'", fontSize: 16, color: T.ivory, lineHeight: 1.45, paddingRight: 16 }}>{text}</div>
+      </div>
+    </div>
+  );
+}
+
+function directionHint(pressed, target) {
+  const dir = pressed < target ? "right" : "left";
+  const arrow = pressed < target ? "\u2192" : "\u2190";
+  return `That was ${noteName(pressed)}. We want ${noteName(target)} \u2014 a little to the ${dir}. ${arrow}`;
+}
+
+/* ---------- GUIDED LESSON (tutor-led) ---------- */
+function GuidedLesson({ lesson, audio, pressed, press, release, register, onComplete, onExit, speech }) {
+  const g = lesson.guide;
+  const lo = g.lo, hi = g.hi;
+  const steps = g.steps;
+  const [idx, setIdx] = useState(0);
+  const [mood, setMood] = useState("idle");
+  const [bubble, setBubble] = useState("");
+  const [prog, setProg] = useState(0);
+  const [waiting, setWaiting] = useState(false);
+  const [done, setDone] = useState(false);
+  const seqRef = useRef([]);
+  const progRef = useRef(0);
+  const advancing = useRef(false);
+
+  const step = idx < steps.length ? steps[idx] : null;
+  const want = step ? (step.want || { type: "none" }) : { type: "none" };
+
+  useEffect(() => {
+    if (done) return;
+    if (idx >= steps.length) {
+      setDone(true); setMood("cheer"); setWaiting(false);
+      const end = g.outro || "You did it! I'm so proud of you.";
+      setBubble(end); speech.say(end);
+      onComplete(3, 100);
+      return;
+    }
+    const st = steps[idx];
+    const w = st.want || { type: "none" };
+    advancing.current = false;
+    progRef.current = 0; setProg(0);
+    if (w.type === "notes") seqRef.current = [...w.midis];
+    setMood("idle");
+    setBubble(st.tell || "");
+    if (st.tell) speech.say(st.tell);
+    setWaiting(w.type !== "none");
+  }, [idx, done]); // eslint-disable-line
+
+  const goNext = useCallback((delay) => {
+    if (advancing.current) return;
+    advancing.current = true;
+    setWaiting(false);
+    setTimeout(() => setIdx((i) => i + 1), delay);
+  }, []);
+
+  const succeed = useCallback((msg) => {
+    setMood("happy");
+    if (msg) { setBubble(msg); speech.say(msg); }
+    goNext(msg ? 1000 : 400);
+  }, [goNext, speech]);
+
+  const blip = useCallback(() => {
+    setMood("happy");
+    setTimeout(() => setMood("idle"), 320);
+  }, []);
+
+  const nudge = useCallback((msg) => {
+    setMood("oops");
+    if (msg) { setBubble(msg); speech.say(msg); }
+    setTimeout(() => setMood("idle"), 1100);
+  }, [speech]);
+
+  const onNote = useCallback((m) => {
+    if (done || !waiting || !step) return;
+    const w = step.want;
+    if (w.type === "any") { succeed(step.good); return; }
+    if (w.type === "count") {
+      const nx = progRef.current + 1; progRef.current = nx; setProg(nx);
+      if (nx >= w.n) succeed(step.good); else blip();
+      return;
+    }
+    if (w.type === "region") {
+      if (m >= w.lo && m <= w.hi) {
+        const nx = progRef.current + 1; progRef.current = nx; setProg(nx);
+        if (nx >= (w.n || 1)) succeed(step.good); else blip();
+      } else {
+        nudge(m < w.lo ? "That one's quite low \u2014 try further to the right. \u2192"
+                       : "That one's very high \u2014 try further to the left. \u2190");
+      }
+      return;
+    }
+    if (w.type === "note") {
+      if (m === w.midi) {
+        const need = w.n || 1;
+        const nx = progRef.current + 1; progRef.current = nx; setProg(nx);
+        if (nx >= need) succeed(step.good); else blip();
+      } else nudge(step.bad || directionHint(m, w.midi));
+      return;
+    }
+    if (w.type === "notes") {
+      const need = seqRef.current[0];
+      if (m === need) {
+        seqRef.current.shift();
+        const nx = progRef.current + 1; progRef.current = nx; setProg(nx);
+        if (seqRef.current.length === 0) succeed(step.good); else blip();
+      } else nudge(directionHint(m, need));
+      return;
+    }
+  }, [done, waiting, step, succeed, blip, nudge]);
+
+  useEffect(() => { register.current = onNote; }, [onNote, register]);
+
+  const targets = {};
+  if (!done && step) {
+    if (want.type === "note") targets[want.midi] = "hint";
+    else if (want.type === "notes") { const nx = seqRef.current[0]; if (nx != null) targets[nx] = "hint"; }
+    else if (want.type === "region") { for (let mm = want.lo; mm <= want.hi; mm++) if (!isBlack(mm)) targets[mm] = "hint"; }
+  }
+
+  const total = want.type === "count" ? want.n
+    : want.type === "note" ? (want.n || 1)
+      : want.type === "notes" ? want.midis.length
+        : want.type === "region" ? (want.n || 1) : 1;
+
+  const showNext = !done && want.type === "none";
+  const prompt = want.type === "note" || want.type === "notes" ? "Play the glowing key."
+    : want.type === "region" ? "Play a key in the glowing part."
+      : want.type === "any" ? "Press any key you like."
+        : "Keep going!";
+
+  return (
+    <div>
+      <BackLink onExit={onExit} />
+      <h2 style={{ fontFamily: "'Baloo 2'", fontWeight: 800, fontSize: 26, color: T.ivory, margin: "0 0 12px" }}>{lesson.title}</h2>
+      <Tutor text={bubble} mood={mood} speech={speech} />
+      {!done && total > 1 && waiting && (
+        <div style={{ textAlign: "center", margin: "0 0 10px", fontFamily: "'DM Mono',monospace", color: T.muted, fontSize: 13 }}>
+          {prog} / {total}
+        </div>
+      )}
+      <Piano lo={lo} hi={hi} pressed={pressed} targets={targets} labels={g.labels !== false}
+        press={press} release={release} height={hi - lo > 20 ? 150 : 180} />
+      <div style={{ display: "flex", gap: 10, marginTop: 14, alignItems: "center", flexWrap: "wrap" }}>
+        {showNext && <Btn onClick={() => goNext(120)}>Next</Btn>}
+        {done && <Btn onClick={onExit}>Back to the map</Btn>}
+        {!done && !showNext && (
+          <span style={{ color: T.mint, fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 14 }}>{prompt}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- LESSON MAP ---------- */
 function LessonMap({ p, unlocked, onPick, onFreePlay }) {
   const nextId = LESSONS.find((l) => !p.lessons[l.id]?.done)?.id;
@@ -1781,6 +2122,7 @@ const Pill = ({ icon, label }) => (
 export default function PianoQuest() {
   const audio = useAudio();
   const { p, loaded, complete, reset } = useProgress();
+  const speech = useSpeech();
   const [view, setView] = useState({ name: "map" });
   const [pressed, setPressed] = useState(new Set());
   const [toast, setToast] = useState(null);
@@ -1805,18 +2147,23 @@ export default function PianoQuest() {
 
   const handleComplete = useCallback((id) => (stars, acc) => {
     complete(id, stars, acc);
-    setToast({ stars, xp: LESSONS.find((l) => l.id === id)?.xp || 0 });
-    setTimeout(() => setToast(null), 2400);
-  }, [complete]);
+    const lsn = LESSONS.find((l) => l.id === id);
+    const line = lsn && lsn.kind !== "guided"
+      ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : null;
+    if (line) speech.say(line);
+    setToast({ stars, xp: lsn?.xp || 0, line });
+    setTimeout(() => setToast(null), 2600);
+  }, [complete, speech]);
 
   const back = () => { register.current = () => {}; setView({ name: "map" }); };
   const lesson = view.lesson;
   const Engine = lesson && {
     song: SongPlayer, read: ReadDrill, find: FindDrill,
     rhythm: RhythmDrill, improv: ImprovJam, concept: ConceptLesson,
+    guided: GuidedLesson,
   }[lesson.kind];
 
-  const shared = { audio, pressed, press, release, register };
+  const shared = { audio, pressed, press, release, register, speech };
 
   // iPad Safari won't make a sound until audio is started inside a real
   // touch. One tap on the way in, and it's live for the whole session.
@@ -1960,8 +2307,19 @@ export default function PianoQuest() {
           padding: "12px 20px", display: "flex", gap: 12, alignItems: "center",
           boxShadow: "0 10px 40px rgba(0,0,0,.5)", zIndex: 50,
         }}>
-          <Stars n={toast.stars} size={18} />
-          <span style={{ fontFamily: "'Baloo 2'", fontWeight: 800, color: T.ivory }}>+{toast.xp} XP</span>
+          {toast.line && (
+            <div style={{ width: 42, height: 42, borderRadius: "50%", background: T.velvet,
+              border: `1.5px solid ${T.line}`, display: "flex", alignItems: "center", justifyContent: "center", flex: "0 0 auto" }}>
+              <WrenAvatar mood="cheer" size={34} />
+            </div>
+          )}
+          <div>
+            {toast.line && <div style={{ fontFamily: "'Nunito Sans'", fontSize: 13, color: T.ivory, marginBottom: 2 }}>{toast.line}</div>}
+            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <Stars n={toast.stars} size={18} />
+              <span style={{ fontFamily: "'Baloo 2'", fontWeight: 800, color: T.ivory }}>+{toast.xp} XP</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
