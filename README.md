@@ -49,6 +49,31 @@ with no address bar, and it works on a plane.
 
 ---
 
+## Deploying an update
+
+After any change, from inside the `piano-quest` folder:
+
+```bash
+npm install        # first time only
+npx vercel --prod
+```
+
+That is the whole process. Vercel runs the build itself and serves `dist/`.
+
+### It really does reach the iPad
+
+The build stamps a fresh id into the service worker cache name every time
+(`piano-quest-<hash>`). This matters more than it sounds: a service worker is
+only reinstalled when `sw.js` *changes*, so without the stamp an installed iPad
+would keep serving the old cached app **forever** and redeploying could not fix
+it.
+
+An open app also listens for the new version and reloads itself once, so she
+gets the update on next launch rather than some later one. Verified by
+simulating a redeploy against an already-installed client.
+
+If it ever does look stale: swipe the app closed and reopen it.
+
 ## Rebuilding after a change
 
 ```bash
@@ -75,6 +100,21 @@ npm run build     # -> dist/
 
 ---
 
+## Playing a real piano (mic mode)
+
+Tap **"Use my piano"** and the app listens through the microphone, so she can
+play an actual acoustic or digital piano and have her notes recognised. This
+works on the iPad, which is the important part — it is the way around Safari's
+missing MIDI support.
+
+Accuracy in the beginner range (C3–C6) measured at 100%, including in a noisy
+room and when playing quietly. **One note at a time, though** — chords are not
+reliably detectable from a microphone by anyone, Yousician included, so chord
+lessons prompt her to tap the on-screen keys instead.
+
+Two practical notes: it needs HTTPS (so the deployed URL, not a local file), and
+iOS will ask permission the first time — tap Allow.
+
 ## The one real limitation: MIDI
 
 **Safari on iPadOS does not support Web MIDI.** Not "poorly" — not at all.
@@ -97,10 +137,62 @@ a developer account, and a different piece of work. Say the word and I'll do it.
 
 ---
 
+## Practice tools: speed and looping
+
+Every song has a **speed** row (50–100% of the written tempo) and a **bars** row
+for looping just the tricky section over and over. This is the single most
+useful thing for actually learning a piece: slow it down, drill the four bars
+that keep going wrong, then bring the speed back up.
+
+"Speed up as she improves" is on by default — a clean pass automatically nudges
+the tempo to the next notch, so she creeps toward full speed without having to
+think about it.
+
+Stars stay meaningful: three stars needs the whole song at 90% speed or above.
+A slow or partial run still clears the lesson and still earns up to two stars,
+and the result card explains exactly what's needed for the third.
+
+## Ear training
+
+Three lessons where the app plays a phrase and she plays it back — the skill
+that separates a child who can only read music from one who can actually hear
+it. It's also the only part of the app that works with her eyes shut.
+
+The difficulty ramps by taking away help rather than adding speed: one note
+with middle C played first as an anchor, then two notes, then three notes with
+no anchor and no letters on the keys. She can replay a phrase as often as she
+likes at no cost, because relistening is what real musicians do.
+
+## Finger numbers
+
+Songs that stay in one hand position show which finger to use — 1 is the thumb,
+5 the pinky — both on the falling notes and as a badge on the key she should
+press. There's a toggle to hide them once she knows the piece.
+
+Songs where the hand has to move mid-phrase show no numbers at all. That's
+deliberate: a wrong finger number is worse than none, because bad fingering is
+genuinely hard to unlearn. Those songs need a teacher, or a proper edition.
+
+## The virtual tutor
+
+The first six lessons of Level 1 are led by **Wren**, a friendly songbird who
+talks the child through her first notes one step at a time — find middle C, name
+each finger, play a three-note tune. When the wrong key is pressed, Wren says
+what it was and which way to move ("That was D. We want C — a little to the
+left."), so a child can correct herself without an adult sitting beside her.
+
+Wren also **speaks out loud** (Web Speech API), which matters for a young child
+who reads slowly. There's a speaker button in her speech bubble to mute her; the
+choice is remembered. Muting loses nothing — everything she says is also on screen.
+
+Wren is a fixed script, not an AI chatbot: she works with no internet, costs
+nothing per session, and can never say anything unplanned to a child. To add or
+change her lessons, edit the `guided` entries in `LESSONS` (see CLAUDE.md).
+
 ## What's in here
 
 ```
-src/PianoQuest.jsx   the whole app — 38 lessons, 13 songs, the synth, the engines
+src/PianoQuest.jsx   the whole app — 41 lessons, 13 songs, the synth, the engines
 src/main.jsx         entry point, service worker registration, zoom suppression
 public/index.html    the shell, with the iOS meta tags that make install work
 public/sw.js         service worker — caches everything so it runs offline
@@ -119,8 +211,3 @@ files are content-hashed, so those are cached for a year.
 
 All songs are public domain (Beethoven, folk tunes) or written for this app.
 Nothing here needs a licence.
-
----
-
-Live: https://piano-quest-wine.vercel.app (auto-deploys from this branch via Vercel).
-

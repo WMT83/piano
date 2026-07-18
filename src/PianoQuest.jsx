@@ -42,9 +42,18 @@ const BASS_BOTTOM = diaStep(43);   // G2
 const n = (b, m, d = 1, h = "R") => ({ b, m, d, h });
 const chord = (beat, midis, dur) => midis.map((m) => n(beat, m, dur, "L"));
 
+/* Fingering. 1 = thumb ... 5 = pinky, both hands.
+   Deliberately absent for songs that shift hand position mid-phrase
+   (Twinkle, Saints, Jingle, Fr\u00E8re Jacques, F\u00FCr Elise) \u2014 a wrong number is
+   worse than no number, because bad fingering is very hard to unlearn. */
+const FING_C_POS_R = { 60: 1, 62: 2, 64: 3, 65: 4, 67: 5 };       // RH thumb on middle C
+const FING_TRIAD_L = { 48: 5, 52: 3, 55: 1, 47: 5, 50: 3 };       // LH C and G triads
+const FING_SCALE_R = { 60: 1, 62: 2, 64: 3, 65: 1, 67: 2, 69: 3, 71: 4, 72: 5 }; // thumb tucks after E
+
 const SONGS = {
   hotCross: {
     title: "Hot Cross Buns", bpm: 68, ts: 4, range: [60, 72], hands: "R",
+    fing: { R: FING_C_POS_R },
     blurb: "Three notes. That's the whole song.",
     notes: [
       n(0, 64), n(1, 62), n(2, 60, 2),
@@ -56,6 +65,7 @@ const SONGS = {
   },
   mary: {
     title: "Mary Had a Little Lamb", bpm: 84, ts: 4, range: [60, 72], hands: "R",
+    fing: { R: FING_C_POS_R },
     blurb: "Five fingers, no moving. Stay in C position.",
     notes: [
       n(0, 64), n(1, 62), n(2, 60), n(3, 62),
@@ -70,6 +80,7 @@ const SONGS = {
   },
   odeToJoy: {
     title: "Ode to Joy", bpm: 88, ts: 4, range: [60, 72], hands: "R",
+    fing: { R: FING_C_POS_R },
     blurb: "Beethoven wrote this when he could no longer hear it.",
     notes: [
       n(0, 64), n(1, 64), n(2, 65), n(3, 67),
@@ -144,6 +155,7 @@ const SONGS = {
   },
   odeHT: {
     title: "Ode to Joy \u2014 Hands Together", bpm: 78, ts: 4, range: [45, 72], hands: "B",
+    fing: { R: FING_C_POS_R, L: FING_TRIAD_L },
     blurb: "The melody you already know. Now add the chords underneath.",
     notes: [
       n(0, 64), n(1, 64), n(2, 65), n(3, 67),
@@ -194,6 +206,7 @@ const SONGS = {
   },
   scaleStudy: {
     title: "C Major Scale Study", bpm: 76, ts: 4, range: [60, 72], hands: "R",
+    fing: { R: FING_SCALE_R },
     blurb: "The thumb tucks under after E. That one move unlocks every scale.",
     notes: [
       n(0, 60), n(1, 62), n(2, 64), n(3, 65),
@@ -405,6 +418,15 @@ const LESSONS = [
   { id: "song-mary", lvl: 1, title: "Mary Had a Little Lamb", xp: 40, kind: "song", song: "mary" },
   { id: "song-auclair", lvl: 1, title: "Au Clair de la Lune", xp: 45, kind: "song", song: "auclair" },
   {
+    id: "ear-basics", lvl: 1, title: "Listen and Copy", xp: 30, kind: "ear",
+    concept: {
+      big: "Close your eyes. Can you find the note you just heard?",
+      body: "This is playing by ear, and it is a completely different skill from reading. You'll hear middle C first, so you know where home is \u2014 then one mystery note. Find it on the keys.",
+      points: ["C is played first every time, as your anchor", "Is the mystery note higher or lower than C?", "Guessing wrong costs nothing. Listen again as often as you like."],
+    },
+    ear: { range: [60, 72], pool: [60, 62, 64], len: 1, rounds: 8, reference: 60 },
+  },
+  {
     id: "note-values", lvl: 1, title: "Half Notes & Whole Notes", xp: 25, kind: "concept",
     concept: {
       big: "Some notes get to hang around longer.",
@@ -479,6 +501,15 @@ const LESSONS = [
     },
     find: { prompt: "Play the F chord \u2014 C, F and A together", targets: [48, 53, 57], together: true, range: [48, 60] },
   },
+  {
+    id: "ear-intervals", lvl: 2, title: "Two Notes at a Time", xp: 40, kind: "ear",
+    concept: {
+      big: "Now two notes. Hear the distance between them.",
+      body: "Musicians don't hear notes one at a time \u2014 they hear the gap. A small step sounds gentle; a big leap sounds dramatic. Listen to both notes, then play them back in the same order.",
+      points: ["Play them back in order, left to right", "Did it step to a neighbour, or leap further?", "Hum the two notes before you play them \u2014 it really helps"],
+    },
+    ear: { range: [60, 72], pool: [60, 62, 64, 65, 67], len: 2, rounds: 8, reference: 60 },
+  },
   { id: "song-firstduet", lvl: 2, title: "Both Hands Warm-Up", xp: 50, kind: "song", song: "firstDuet" },
   { id: "song-twinkle", lvl: 2, title: "Twinkle, Twinkle, Little Star", xp: 60, kind: "song", song: "twinkle" },
   { id: "song-saints", lvl: 2, title: "When the Saints Go Marching In", xp: 55, kind: "song", song: "saints" },
@@ -511,6 +542,15 @@ const LESSONS = [
       points: ["G major = 1 sharp (F\u266F)", "F major = 1 flat (B\u266D)", "C major = no sharps, no flats. That's why we started there."],
     },
     read: { clef: "treble", pool: [60, 62, 64, 65, 67, 69, 71, 72], rounds: 10, range: [60, 72] },
+  },
+  {
+    id: "ear-phrases", lvl: 3, title: "Play It Back by Ear", xp: 55, kind: "ear",
+    concept: {
+      big: "Three notes, no safety net.",
+      body: "No anchor note this time, and no letters on the keys. Just your ear and the keyboard. This is how musicians work out a tune they've only ever heard.",
+      points: ["Hold the shape of the phrase in your head first", "Up or down? By a step, or a leap?", "Getting one wrong is normal. Real musicians replay things constantly."],
+    },
+    ear: { range: [60, 72], pool: [60, 62, 64, 65, 67, 69], len: 3, rounds: 8, labels: false },
   },
   {
     id: "minor", lvl: 3, title: "Minor Keys", xp: 40, kind: "find",
@@ -547,7 +587,7 @@ const LEVELS = [
   { n: 2, name: "Player", tag: "Both hands", color: T.brass },
   { n: 3, name: "Virtuoso", tag: "Real repertoire", color: T.ribbon },
 ];
-const ICON = { concept: "\u{1F4A1}", song: "\u{1F3B5}", read: "\u{1F441}", find: "\u{1F50E}", rhythm: "\u{1F941}", improv: "\u{1F3BA}", guided: "\u{1F426}" };
+const ICON = { concept: "\u{1F4A1}", song: "\u{1F3B5}", read: "\u{1F441}", find: "\u{1F50E}", rhythm: "\u{1F941}", improv: "\u{1F3BA}", guided: "\u{1F426}", ear: "\u{1F442}" };
 const PRAISE = ["Beautiful playing!", "You are getting so good!", "I knew you could do it!",
   "That sounded lovely!", "High five!", "You are a real musician now!", "Wonderful work!"];
 
@@ -710,6 +750,178 @@ function useInput({ onDown, onUp }) {
   return { midiState, connectMidi };
 }
 
+/* ---------- MICROPHONE PITCH DETECTION ---------- */
+/* Lets her play a REAL piano and have the app listen. This is the only way to
+   get real-instrument input on an iPad, since Safari has no Web MIDI.
+   McLeod Pitch Method (NSDF): a piano's strong harmonics make naive
+   autocorrelation report notes an octave too low, and MPM's key-maximum
+   picking is what avoids that. Monophonic only \u2014 see MIC_NOTE below. */
+function detectPitch(buf, sampleRate, { minHz = 60, maxHz = 1500, clarityMin = 0.86, rmsMin = 0.008 } = {}) {
+  const n = buf.length;
+  let rms = 0;
+  for (let i = 0; i < n; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / n);
+  if (rms < rmsMin) return { hz: 0, clarity: 0, rms };
+
+  const maxLag = Math.min(n - 1, Math.floor(sampleRate / minHz));
+  const minLag = Math.max(2, Math.floor(sampleRate / maxHz));
+  const nsdf = new Float32Array(maxLag + 2);
+  for (let lag = 1; lag <= maxLag; lag++) {
+    let ac = 0, sq = 0;
+    for (let i = 0; i < n - lag; i++) {
+      ac += buf[i] * buf[i + lag];
+      sq += buf[i] * buf[i] + buf[i + lag] * buf[i + lag];
+    }
+    nsdf[lag] = sq > 0 ? (2 * ac) / sq : 0;
+  }
+
+  let pos = 1;
+  while (pos < maxLag && nsdf[pos] > 0) pos++;      // skip the trivial lobe
+  while (pos < maxLag && nsdf[pos] <= 0) pos++;
+  const peaks = [];
+  while (pos < maxLag) {
+    let best = pos;
+    while (pos < maxLag && nsdf[pos] > 0) { if (nsdf[pos] > nsdf[best]) best = pos; pos++; }
+    if (nsdf[best] > 0) peaks.push(best);
+    while (pos < maxLag && nsdf[pos] <= 0) pos++;
+  }
+  const valid = peaks.filter((x) => x >= minLag && x <= maxLag);
+  if (!valid.length) return { hz: 0, clarity: 0, rms };
+
+  let maxVal = 0;
+  for (const x of valid) if (nsdf[x] > maxVal) maxVal = nsdf[x];
+  const chosen = valid.find((x) => nsdf[x] >= maxVal * 0.85);
+  if (chosen == null) return { hz: 0, clarity: 0, rms };
+
+  const y1 = nsdf[chosen - 1] || 0, y2 = nsdf[chosen], y3 = nsdf[chosen + 1] || 0;
+  const den = 2 * (2 * y2 - y1 - y3);
+  const lag = chosen + (den !== 0 ? (y3 - y1) / den : 0);
+  const hz = sampleRate / lag;
+  if (y2 < clarityMin || hz < minHz || hz > maxHz) return { hz: 0, clarity: y2, rms };
+  return { hz, clarity: y2, rms };
+}
+const hzToMidi = (hz) => Math.round(69 + 12 * Math.log2(hz / 440));
+
+const MIC_NOTE = "Mic mode hears one note at a time. For chords, use the on-screen keys.";
+
+function useMic({ onNote, onOff }) {
+  const [state, setState] = useState("off");   // off|asking|on|denied|unsupported|error
+  const [heard, setHeard] = useState(null);
+  const [level, setLevel] = useState(0);
+  const noteRef = useRef(onNote), offRef = useRef(onOff);
+  noteRef.current = onNote; offRef.current = onOff;
+  const rig = useRef(null);
+
+  const stop = useCallback(() => {
+    const r = rig.current;
+    if (r) {
+      cancelAnimationFrame(r.raf);
+      try { r.stream.getTracks().forEach((t) => t.stop()); } catch (e) {}
+      try { r.ac.close(); } catch (e) {}
+      if (r.cur != null) offRef.current?.(r.cur);
+      rig.current = null;
+    }
+    setState("off"); setHeard(null); setLevel(0);
+  }, []);
+
+  const start = useCallback(async () => {
+    if (!navigator.mediaDevices?.getUserMedia) { setState("unsupported"); return; }
+    setState("asking");
+    try {
+      // All the browser's "helpful" DSP mangles pitch content, so turn it off.
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+      });
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ac = new AC();
+      if (ac.state === "suspended") await ac.resume();
+      const src = ac.createMediaStreamSource(stream);
+      const an = ac.createAnalyser();
+      an.fftSize = 4096;
+      an.smoothingTimeConstant = 0;
+      src.connect(an);
+
+      const D = 4;                                   // decimate 44.1k -> ~11k
+      const raw = new Float32Array(an.fftSize);
+      const small = new Float32Array(an.fftSize / D);
+      const sr = ac.sampleRate / D;
+
+      const r = { ac, stream, an, raw, small, sr, D, cur: null, cand: null, stable: 0,
+                  quiet: 0, floor: 0.004, lastRms: 0, lastFire: 0, raf: 0 };
+      rig.current = r;
+
+      const tick = () => {
+        r.raf = requestAnimationFrame(tick);
+        an.getFloatTimeDomainData(raw);
+        for (let i = 0; i < small.length; i++) {
+          let s = 0;
+          for (let j = 0; j < D; j++) s += raw[i * D + j];
+          small[i] = s / D;                          // box filter doubles as anti-alias
+        }
+        // adaptive noise floor, so a noisy room self-calibrates
+        let rms = 0;
+        for (let i = 0; i < small.length; i++) rms += small[i] * small[i];
+        rms = Math.sqrt(rms / small.length);
+        r.floor = rms < r.floor ? r.floor * 0.9 + rms * 0.1 : r.floor * 0.995 + rms * 0.005;
+        const gate = Math.max(0.006, r.floor * 2.5);
+        setLevel(Math.min(1, rms / 0.15));
+
+        const res = detectPitch(small, r.sr, { rmsMin: gate });
+        const now = performance.now();
+
+        if (res.hz) {
+          const m = hzToMidi(res.hz);
+          r.quiet = 0;
+          if (m === r.cand) r.stable++; else { r.cand = m; r.stable = 1; }
+          const reattack = m === r.cur && rms > r.lastRms * 2.2 && now - r.lastFire > 130;
+          if (r.stable >= 2 && (m !== r.cur || reattack)) {
+            if (r.cur != null && m !== r.cur) offRef.current?.(r.cur);
+            r.cur = m; r.lastFire = now;
+            setHeard(m);
+            noteRef.current?.(m, Math.min(1, 0.35 + rms * 4));
+          }
+        } else {
+          r.quiet++;
+          if (r.quiet > 5 && r.cur != null) { offRef.current?.(r.cur); r.cur = null; setHeard(null); }
+        }
+        r.lastRms = rms;
+      };
+      r.raf = requestAnimationFrame(tick);
+      setState("on");
+    } catch (e) {
+      setState(e && e.name === "NotAllowedError" ? "denied" : "error");
+    }
+  }, []);
+
+  useEffect(() => () => stop(), [stop]);
+  return { state, heard, level, start, stop };
+}
+
+function MicButton({ mic, compact }) {
+  const on = mic.state === "on";
+  const label = { off: "Use my piano", asking: "Asking\u2026", on: "Listening", denied: "Mic blocked",
+    unsupported: "No mic", error: "Mic error" }[mic.state];
+  return (
+    <button onClick={() => (on ? mic.stop() : mic.start())}
+      title={on ? "Stop listening" : "Play a real piano and let the app listen"}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer",
+        background: on ? T.mint : T.panel, color: on ? "#0d2b20" : T.ivory,
+        border: `1.5px solid ${on ? T.mint : T.line}`, borderRadius: 11,
+        padding: compact ? "7px 11px" : "9px 14px",
+        fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: compact ? 13 : 14,
+      }}>
+      <span style={{ fontSize: 15 }}>{on ? "\u{1F399}" : "\u{1F3B9}"}</span>
+      {label}
+      {on && (
+        <span style={{ display: "inline-block", width: 34, height: 5, borderRadius: 3, background: "rgba(0,0,0,.25)", overflow: "hidden" }}>
+          <span style={{ display: "block", height: "100%", width: `${Math.round(mic.level * 100)}%`, background: "#0d2b20", transition: "width .08s" }} />
+        </span>
+      )}
+    </button>
+  );
+}
+
 /* ---------- PROGRESS ---------- */
 const EMPTY = { xp: 0, lessons: {}, badges: [], streak: 0, lastDay: null };
 const BADGES = {
@@ -807,7 +1019,7 @@ function useKeyLayout(lo, hi) {
   }, [lo, hi]);
 }
 
-function Piano({ lo, hi, pressed, targets = {}, labels, press, release, height = 150 }) {
+function Piano({ lo, hi, pressed, targets = {}, labels, press, release, height = 150, fingers = null }) {
   const { keys } = useKeyLayout(lo, hi);
   const held = useRef(new Set());
   const tintColor = (t) => (t === "L" ? LH : t === "R" ? RH : T.mint);
@@ -842,11 +1054,20 @@ function Piano({ lo, hi, pressed, targets = {}, labels, press, release, height =
               transition: "transform .04s, background .08s",
               cursor: "pointer", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 8,
             }}>
-            {labels && (
-              <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, color: on ? "#2b1d0a" : "#93856f", pointerEvents: "none" }}>
-                {noteName(k.midi)}{k.midi === 60 ? "\u2022" : ""}
-              </span>
-            )}
+            <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, pointerEvents: "none" }}>
+              {fingers && fingers[k.midi] && (
+                <span style={{
+                  fontFamily: "'Baloo 2',system-ui", fontWeight: 800, fontSize: 13,
+                  width: 18, height: 18, borderRadius: "50%", lineHeight: "18px",
+                  background: T.ink, color: T.brass, textAlign: "center",
+                }}>{fingers[k.midi]}</span>
+              )}
+              {labels && (
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, color: on ? "#2b1d0a" : "#93856f" }}>
+                  {noteName(k.midi)}{k.midi === 60 ? "\u2022" : ""}
+                </span>
+              )}
+            </span>
           </div>
         );
       })}
@@ -930,7 +1151,7 @@ function Staff({ notes, clef = "treble", width = 300, showNames = false, highlig
 }
 
 /* ---------- NOTE HIGHWAY ---------- */
-function Highway({ notes, beat, lo, hi, hits, ts = 4, height = 230, pxPerBeat = 62 }) {
+function Highway({ notes, beat, lo, hi, hits, ts = 4, height = 230, pxPerBeat = 62, fing = null }) {
   const { keys } = useKeyLayout(lo, hi);
   const posOf = (m) => keys.find((k) => k.midi === m);
   const hitLine = height - 8;
@@ -972,7 +1193,18 @@ function Highway({ notes, beat, lo, hi, hits, ts = 4, height = 230, pxPerBeat = 
             boxShadow: state === "hit" ? `0 0 18px ${T.mint}cc` : live ? `0 0 22px ${col}` : `0 0 10px ${col}55`,
             opacity: state === "miss" ? 0.35 : 1,
             border: nt.m % 12 === 0 ? "1px solid rgba(255,255,255,.45)" : "none",
-          }} />
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            {fing && h >= 17 && (() => {
+              const f = fing[nt.h === "L" ? "L" : "R"]?.[nt.m];
+              return f ? (
+                <span style={{
+                  fontFamily: "'Baloo 2',system-ui", fontWeight: 800, fontSize: 12,
+                  color: "rgba(20,12,28,.82)", pointerEvents: "none", lineHeight: 1,
+                }}>{f}</span>
+              ) : null;
+            })()}
+          </div>
         );
       })}
       <div style={{
@@ -1061,6 +1293,9 @@ function ConceptBlock({ lesson, onExit, expanded }) {
 }
 
 /* ---------- SONG PLAYER ---------- */
+const TEMPO_STEPS = [50, 60, 70, 80, 90, 100];
+
+
 function SongPlayer({ lesson, audio, pressed, press, release, register, onComplete, onExit }) {
   const song = SONGS[lesson.song];
   const [lo, hi] = song.range;
@@ -1071,24 +1306,53 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
   const [waiting, setWaiting] = useState(null);
   const [result, setResult] = useState(null);
   const [labels, setLabels] = useState(true);
+  const [tempo, setTempo] = useState(100);      // percent of the written tempo
+  const [seg, setSeg] = useState(null);         // which chunk of bars to loop
+  const [autoUp, setAutoUp] = useState(true);   // speed up after a clean pass
+  const [showFing, setShowFing] = useState(true);
+  const [bumped, setBumped] = useState(null);
 
   const startRef = useRef(0), rafRef = useRef(0);
   const hitsRef = useRef(new Map()), waitRef = useRef(null);
   const lastClick = useRef(-99), played = useRef(new Set());
   const modeRef = useRef(mode); modeRef.current = mode;
+  const originRef = useRef(0), countRef = useRef(4);
 
-  const total = song.notes.length;
-  const endBeat = useMemo(() => Math.max(...song.notes.map((x) => x.b + x.d)) + 2, [song]);
-  const spb = 60 / song.bpm;
+  const songEnd = useMemo(() => Math.max(...song.notes.map((x) => x.b + x.d)), [song]);
+  const bars = Math.max(1, Math.ceil(songEnd / song.ts));
+
+  // Split into practisable chunks. Short songs get 2-bar chunks so there is
+  // something small enough to actually drill.
+  const chunkBars = bars <= 8 ? 2 : 4;
+  const segments = useMemo(() => {
+    const out = [];
+    for (let b0 = 0; b0 < bars; b0 += chunkBars) {
+      const b1 = Math.min(bars, b0 + chunkBars);
+      out.push({ from: b0 * song.ts, to: b1 * song.ts, label: `${b0 + 1}\u2013${b1}` });
+    }
+    return out;
+  }, [bars, chunkBars, song.ts]);
+
+  const region = seg != null && segments[seg]
+    ? segments[seg]
+    : { from: 0, to: songEnd + 0.001, label: "all" };
+
+  // only the notes inside the section being practised count
+  const inPlay = useMemo(
+    () => song.notes.filter((x) => x.b >= region.from - 1e-6 && x.b < region.to - 1e-6),
+    [song, region.from, region.to]);
+  const total = inPlay.length;
+  const endBeat = region.to + 1.5;
+  const spb = 60 / (song.bpm * (tempo / 100));
 
   const groups = useMemo(() => {
     const g = new Map();
-    song.notes.forEach((x) => {
+    inPlay.forEach((x) => {
       if (!g.has(x.b)) g.set(x.b, []);
       g.get(x.b).push(x);
     });
     return [...g.entries()].sort((a, b) => a[0] - b[0]);
-  }, [song]);
+  }, [inPlay]);
 
   const reset = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -1096,8 +1360,10 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
     waitRef.current = null;
     played.current = new Set();
     lastClick.current = -99;
-    setHits(new Map()); setWaiting(null); setBeat(-4); setRunning(false); setResult(null);
-  }, []);
+    originRef.current = region.from;
+    countRef.current = 4;
+    setHits(new Map()); setWaiting(null); setBeat(region.from - 4); setRunning(false); setResult(null);
+  }, [region.from]);
 
   const finish = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -1112,24 +1378,48 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
       return;
     }
     const acc = total ? Math.round((hit / total) * 100) : 0;
-    const stars = acc >= 95 ? 3 : acc >= 80 ? 2 : acc >= 55 ? 1 : 0;
-    setResult({ kind: "perform", acc, stars, hit, total });
+    let stars = acc >= 95 ? 3 : acc >= 80 ? 2 : acc >= 55 ? 1 : 0;
+    // Slow practice is how you learn, but a top score should mean she can
+    // really play it: 3 stars needs near-full speed and the whole song.
+    const partial = seg != null;
+    const capped = tempo < 90 || partial;
+    if (capped) stars = Math.min(stars, 2);
+    setResult({ kind: "perform", acc, stars, hit, total, tempo, partial, capped });
     if (stars >= 1) onComplete(stars, acc);
-  }, [total, onComplete]);
+
+    // auto speed-up: a clean pass earns the next notch, the way a teacher would
+    if (autoUp && acc >= 90 && tempo < 100) {
+      const nxt = TEMPO_STEPS.find((t) => t > tempo);
+      if (nxt) { setTempo(nxt); setBumped(nxt); }
+    }
+  }, [total, onComplete, tempo, seg, autoUp]);
 
   useEffect(() => {
     if (!running) return;
     const loop = () => {
-      let b = waitRef.current ? waitRef.current.beat : (audio.now() - startRef.current) / spb - 4;
+      let b = waitRef.current
+        ? waitRef.current.beat
+        : (audio.now() - startRef.current) / spb - countRef.current + originRef.current;
 
-      if (b < 0) {
-        const cb = Math.floor(b);
-        if (cb !== lastClick.current) { lastClick.current = cb; audio.click(cb === -4); }
+      // looping a section: wrap round and wipe that section's marks
+      if (!waitRef.current && seg != null && b > region.to) {
+        hitsRef.current = new Map();
+        played.current = new Set();
+        setHits(new Map());
+        countRef.current = 0;
+        originRef.current = region.from;
+        startRef.current = audio.now();
+        b = region.from;
       }
 
-      if (modeRef.current === "listen" && b >= 0) {
+      if (b < originRef.current) {
+        const cb = Math.floor(b);
+        if (cb !== lastClick.current) { lastClick.current = cb; audio.click(cb === originRef.current - 4); }
+      }
+
+      if (modeRef.current === "listen" && b >= originRef.current) {
         let changed = false;
-        song.notes.forEach((x) => {
+        inPlay.forEach((x) => {
           const key = x.b + ":" + x.m;
           if (!played.current.has(key) && b >= x.b) {
             played.current.add(key);
@@ -1141,16 +1431,16 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
         if (changed) setHits(new Map(hitsRef.current));
       }
 
-      if (modeRef.current === "perform" && b >= 0) {
+      if (modeRef.current === "perform" && b >= originRef.current) {
         let changed = false;
-        song.notes.forEach((x) => {
+        inPlay.forEach((x) => {
           const key = x.b + ":" + x.m;
           if (!hitsRef.current.has(key) && b > x.b + 0.42) { hitsRef.current.set(key, "miss"); changed = true; }
         });
         if (changed) setHits(new Map(hitsRef.current));
       }
 
-      if (modeRef.current === "practice" && b >= 0 && !waitRef.current) {
+      if (modeRef.current === "practice" && b >= originRef.current && !waitRef.current) {
         const g = groups.find(([gb, arr]) => gb <= b + 0.02 && arr.some((x) => !hitsRef.current.has(x.b + ":" + x.m)));
         if (g) {
           const w = { beat: g[0], need: new Set(g[1].map((x) => x.m)) };
@@ -1166,7 +1456,7 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [running, song, groups, endBeat, spb, audio, finish]);
+  }, [running, song, inPlay, groups, endBeat, spb, audio, finish, seg, region.from, region.to]);
 
   const onNote = useCallback((m) => {
     if (!running || modeRef.current === "listen") return;
@@ -1181,16 +1471,16 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
         const resume = w.beat + 0.002;
         waitRef.current = null;
         setWaiting(null);
-        startRef.current = audio.now() - (resume + 4) * spb;
+        startRef.current = audio.now() - (resume - originRef.current + countRef.current) * spb;
       } else {
         setWaiting(new Set(w.need));
       }
       return;
     }
 
-    const b = (audio.now() - startRef.current) / spb - 4;
+    const b = (audio.now() - startRef.current) / spb - countRef.current + originRef.current;
     let best = null, bestD = 0.45;
-    song.notes.forEach((x) => {
+    inPlay.forEach((x) => {
       if (x.m !== m || hitsRef.current.has(x.b + ":" + x.m)) return;
       const d = Math.abs(x.b - b);
       if (d < bestD) { bestD = d; best = x; }
@@ -1199,30 +1489,36 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
       hitsRef.current.set(best.b + ":" + best.m, "hit");
       setHits(new Map(hitsRef.current));
     }
-  }, [running, song, spb, audio]);
+  }, [running, inPlay, spb, audio]);
 
   useEffect(() => { register.current = onNote; }, [onNote, register]);
 
-  const start = () => { audio.wake(); reset(); startRef.current = audio.now(); setRunning(true); };
+  const start = () => {
+    audio.wake(); reset(); setBumped(null);
+    originRef.current = region.from;
+    countRef.current = 4;
+    startRef.current = audio.now();
+    setRunning(true);
+  };
 
   const targets = useMemo(() => {
     const t = {};
     if (mode === "practice" && waiting) {
       waiting.forEach((m) => {
-        const nt = song.notes.find((x) => x.m === m && x.b === waitRef.current?.beat);
+        const nt = inPlay.find((x) => x.m === m && x.b === waitRef.current?.beat);
         t[m] = nt?.h || "R";
       });
     } else if (running) {
-      song.notes.forEach((x) => {
+      inPlay.forEach((x) => {
         if (Math.abs(x.b - beat) < 0.18 && hitsRef.current.get(x.b + ":" + x.m) !== "hit") t[x.m] = x.h;
       });
     }
     return t;
-  }, [mode, waiting, running, beat, song, hits]);
+  }, [mode, waiting, running, beat, inPlay, hits]);
 
   const upcoming = useMemo(() =>
-    song.notes.filter((x) => x.h === "R" && x.b >= beat - 0.5).sort((a, b) => a.b - b.b).slice(0, 8).map((x) => x.m),
-    [song, beat]);
+    inPlay.filter((x) => x.h === "R" && x.b >= beat - 0.5).sort((a, b) => a.b - b.b).slice(0, 8).map((x) => x.m),
+    [inPlay, beat]);
 
   const hitCount = [...hits.values()].filter((v) => v === "hit").length;
 
@@ -1252,19 +1548,90 @@ function SongPlayer({ lesson, audio, pressed, press, release, register, onComple
         ))}
       </div>
 
-      <Highway notes={song.notes} beat={beat} lo={lo} hi={hi} hits={hits} ts={song.ts}
+      <Card style={{ marginBottom: 12, background: T.velvet, padding: 13 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+          <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: T.muted, letterSpacing: 1.5, minWidth: 52 }}>SPEED</span>
+          {TEMPO_STEPS.map((t) => (
+            <button key={t} onClick={() => { setTempo(t); if (running) reset(); }}
+              style={{
+                padding: "5px 11px", borderRadius: 9, cursor: "pointer",
+                background: tempo === t ? T.brass : "transparent",
+                color: tempo === t ? "#241804" : T.ivory,
+                border: `1.5px solid ${tempo === t ? T.brass : T.line}`,
+                fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 500,
+              }}>{t}%</button>
+          ))}
+          <span style={{ color: T.muted, fontFamily: "'DM Mono',monospace", fontSize: 12 }}>
+            {Math.round(song.bpm * tempo / 100)} bpm
+          </span>
+          <label style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, color: T.muted, fontSize: 12, fontFamily: "'Nunito Sans'", cursor: "pointer" }}>
+            <input type="checkbox" checked={autoUp} onChange={(e) => setAutoUp(e.target.checked)} style={{ accentColor: T.brass }} />
+            speed up as she improves
+          </label>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: T.muted, letterSpacing: 1.5, minWidth: 52 }}>BARS</span>
+          <button onClick={() => { setSeg(null); if (running) reset(); }}
+            style={{
+              padding: "5px 11px", borderRadius: 9, cursor: "pointer",
+              background: seg === null ? T.mint : "transparent",
+              color: seg === null ? "#0d2b20" : T.ivory,
+              border: `1.5px solid ${seg === null ? T.mint : T.line}`,
+              fontFamily: "'DM Mono',monospace", fontSize: 12,
+            }}>whole song</button>
+          {segments.map((sg, i) => (
+            <button key={i} onClick={() => { setSeg(i === seg ? null : i); if (running) reset(); }}
+              style={{
+                padding: "5px 11px", borderRadius: 9, cursor: "pointer",
+                background: seg === i ? T.mint : "transparent",
+                color: seg === i ? "#0d2b20" : T.ivory,
+                border: `1.5px solid ${seg === i ? T.mint : T.line}`,
+                fontFamily: "'DM Mono',monospace", fontSize: 12,
+              }}>{sg.label}</button>
+          ))}
+        </div>
+        {seg != null && (
+          <div style={{ marginTop: 9, color: T.mint, fontSize: 12.5, fontFamily: "'Nunito Sans'" }}>
+            Looping bars {segments[seg].label} over and over. Tap it again to play the whole song.
+          </div>
+        )}
+      </Card>
+
+      {bumped && (
+        <div style={{
+          marginBottom: 12, padding: "10px 14px", borderRadius: 11,
+          background: T.raised, border: `1.5px solid ${T.brass}`,
+          color: T.ivory, fontFamily: "'Nunito Sans'", fontSize: 14,
+        }}>
+          {"\u26A1"} Clean pass \u2014 speed is now <strong>{bumped}%</strong>. Nudging you a little faster.
+        </div>
+      )}
+
+      <Highway notes={inPlay} beat={beat} lo={lo} hi={hi} hits={hits} ts={song.ts}
+        fing={showFing ? song.fing : null}
         height={230} pxPerBeat={song.bpm > 100 ? 54 : 66} />
       <Piano lo={lo} hi={hi} pressed={pressed} targets={targets} labels={labels}
-        press={press} release={release} height={hi - lo > 20 ? 150 : 180} />
+        press={press} release={release} height={hi - lo > 20 ? 150 : 180}
+        fingers={showFing && song.fing ? Object.keys(targets).reduce((acc, m) => {
+          const f = song.fing[targets[m] === "L" ? "L" : "R"]?.[m];
+          if (f) acc[m] = f;
+          return acc;
+        }, {}) : null} />
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, flexWrap: "wrap" }}>
         {!running
           ? <Btn onClick={start}>{result ? "Play it again" : "Start"}</Btn>
           : <Btn variant="dark" onClick={reset}>Stop</Btn>}
         <Btn variant="ghost" onClick={() => setLabels((v) => !v)}>{labels ? "Hide note names" : "Show note names"}</Btn>
+        {song.fing && (
+          <Btn variant="ghost" onClick={() => setShowFing((v) => !v)}>
+            {showFing ? "Hide finger numbers" : "Show finger numbers"}
+          </Btn>
+        )}
         <div style={{ marginLeft: "auto", display: "flex", gap: 14, alignItems: "center", fontFamily: "'DM Mono',monospace", fontSize: 13, color: T.muted }}>
           <span><span style={{ color: RH }}>{"\u25A0"}</span> right</span>
           {song.hands === "B" && <span><span style={{ color: LH }}>{"\u25A0"}</span> left</span>}
+          {song.fing && showFing && <span>{"\u2460"}=thumb {"\u2464"}=pinky</span>}
           <span style={{ color: T.ivory }}>{hitCount}/{total}</span>
         </div>
       </div>
@@ -1294,10 +1661,14 @@ function ResultCard({ result, onRetry, onExit }) {
       : `${result.acc}% accurate`;
   const sub = kind === "listen" ? "Now switch to Practice and play it yourself."
     : kind === "practice" ? "Lesson cleared. Try Perform mode to earn your stars."
-      : result.stars === 3 ? "Perfect. That is performance-ready."
-        : result.stars === 2 ? "Solid. One more clean pass and it's yours."
-          : result.stars === 1 ? "You got through it. Now tidy it up."
-            : "Not yet. Go back to Practice mode and slow it down.";
+      : result.capped && result.stars >= 2
+        ? (result.partial
+            ? "Nice. Now play the whole song through for the third star."
+            : `Nice \u2014 at ${result.tempo}% speed. Get there at full speed for the third star.`)
+        : result.stars === 3 ? "Perfect. That is performance-ready."
+          : result.stars === 2 ? "Solid. One more clean pass and it's yours."
+            : result.stars === 1 ? "You got through it. Now tidy it up."
+              : "Not yet. Go back to Practice mode and slow it down.";
   return (
     <Card style={{ marginTop: 16, borderColor: T.brass, background: T.raised }}>
       <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
@@ -1393,6 +1764,167 @@ function ReadDrill({ lesson, pressed, press, release, register, onComplete, onEx
         <div style={{ marginTop: 14 }}>
           <Piano lo={lo} hi={hi} pressed={pressed} labels press={press} release={release}
             height={hi - lo > 20 ? 150 : 180} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- EAR TRAINING ---------- */
+/* Play a phrase, she plays it back. No hints on the keys \u2014 that is the point. */
+function EarDrill({ lesson, audio, pressed, press, release, register, onComplete, onExit, speech }) {
+  const cfg = lesson.ear;
+  const [lo, hi] = cfg.range;
+  const [round, setRound] = useState(0);
+  const [phrase, setPhrase] = useState([]);
+  const [got, setGot] = useState([]);
+  const [phase, setPhase] = useState("idle");   // idle|playing|listening|right|wrong
+  const [firstTry, setFirstTry] = useState(0);
+  const [done, setDone] = useState(false);
+  const [reveal, setReveal] = useState(false);
+
+  const deaf = useRef(false);        // true while WE are making the sound
+  const gotRef = useRef([]);
+  const missed = useRef(false);
+  const alive = useRef(true);
+  const timers = useRef([]);
+
+  const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = []; };
+  const wait = (ms) => new Promise((res) => { timers.current.push(setTimeout(res, ms)); });
+
+  useEffect(() => () => { alive.current = false; clearTimers(); }, []);
+
+  const makePhrase = useCallback(() => {
+    const out = [];
+    for (let i = 0; i < cfg.len; i++) {
+      let m, guard = 0;
+      do { m = cfg.pool[Math.floor(Math.random() * cfg.pool.length)]; guard++; }
+      while (guard < 12 && out.length && m === out[out.length - 1]);   // no repeated note
+      out.push(m);
+    }
+    return out;
+  }, [cfg]);
+
+  const playPhrase = useCallback(async (ph) => {
+    if (!alive.current) return;
+    audio.wake();
+    deaf.current = true;                 // ignore input while we play, or the
+    setPhase("playing");                 // microphone would hear us and "answer"
+    gotRef.current = []; setGot([]);
+    if (cfg.reference != null) {
+      audio.pluck(cfg.reference, 760, 0.62);
+      await wait(950);
+    }
+    for (const m of ph) {
+      if (!alive.current) return;
+      audio.pluck(m, 640, 0.85);
+      await wait(720);
+    }
+    await wait(300);                     // let it die away before we listen
+    if (!alive.current) return;
+    deaf.current = false;
+    setPhase("listening");
+  }, [audio, cfg.reference]);
+
+  // next round
+  useEffect(() => {
+    if (done) return;
+    if (round >= cfg.rounds) { setDone(true); setPhase("idle"); return; }
+    const ph = makePhrase();
+    setPhrase(ph);
+    setReveal(false);
+    missed.current = false;
+    playPhrase(ph);
+  }, [round]); // eslint-disable-line
+
+  const onNote = useCallback((m) => {
+    if (done || deaf.current || phase !== "listening") return;
+    const want = phrase[gotRef.current.length];
+    if (m === want) {
+      gotRef.current = [...gotRef.current, m];
+      setGot([...gotRef.current]);
+      if (gotRef.current.length === phrase.length) {
+        if (!missed.current) setFirstTry((f) => f + 1);
+        setPhase("right");
+        speech?.say(missed.current ? "That's it." : "Perfect ear!");
+        timers.current.push(setTimeout(() => setRound((r) => r + 1), 950));
+      }
+    } else {
+      missed.current = true;
+      gotRef.current = []; setGot([]);
+      setPhase("wrong");
+      timers.current.push(setTimeout(() => { if (alive.current) setPhase("listening"); }, 700));
+    }
+  }, [done, phase, phrase, speech]);
+
+  useEffect(() => { register.current = onNote; }, [onNote, register]);
+
+  const acc = Math.round((firstTry / cfg.rounds) * 100);
+  const stars = acc >= 85 ? 3 : acc >= 60 ? 2 : 1;
+  useEffect(() => { if (done) onComplete(stars, acc); }, [done]); // eslint-disable-line
+
+  const msg = phase === "playing" ? "Listen\u2026"
+    : phase === "wrong" ? "Not that one. Have another go."
+      : phase === "right" ? "Yes! That's exactly it."
+        : phase === "listening" ? (cfg.len > 1 ? "Now play it back, in order." : "Now find that note.")
+          : "";
+
+  return (
+    <div>
+      <ConceptBlock lesson={lesson} onExit={onExit} />
+      <Card style={{
+        textAlign: "center",
+        borderColor: phase === "right" ? T.mint : phase === "wrong" ? T.danger : T.line,
+        background: phase === "right" ? "#1e4438" : phase === "wrong" ? "#4a2333" : T.panel,
+      }}>
+        {!done ? (
+          <>
+            <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: T.muted, letterSpacing: 2 }}>
+              {round + 1} OF {cfg.rounds}
+            </div>
+            <div style={{ display: "flex", gap: 9, justifyContent: "center", margin: "14px 0" }}>
+              {phrase.map((m, i) => {
+                const heard = i < got.length;
+                return (
+                  <div key={i} style={{
+                    width: 46, height: 46, borderRadius: 12,
+                    background: heard ? T.mint : phase === "playing" ? T.raised : T.velvet,
+                    border: `2px solid ${heard ? T.mint : T.line}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'Baloo 2'", fontWeight: 800, fontSize: 16,
+                    color: heard ? "#0d2b20" : T.muted,
+                  }}>{reveal || heard ? noteName(m) : "?"}</div>
+                );
+              })}
+            </div>
+            <div style={{ minHeight: 22, color: phase === "wrong" ? T.danger : phase === "right" ? T.mint : T.ivory,
+              fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 15 }}>{msg}</div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12, flexWrap: "wrap" }}>
+              <Btn variant="dark" onClick={() => playPhrase(phrase)} disabled={phase === "playing"}>
+                {"\u21BB"} Play it again
+              </Btn>
+              <Btn variant="ghost" onClick={() => { setReveal(true); missed.current = true; }} disabled={reveal}>
+                Show me
+              </Btn>
+            </div>
+          </>
+        ) : (
+          <div style={{ padding: "10px 0" }}>
+            <Stars n={stars} size={30} />
+            <div style={{ fontFamily: "'Baloo 2'", fontWeight: 800, fontSize: 23, color: T.ivory, marginTop: 6 }}>
+              {firstTry} of {cfg.rounds} first time
+            </div>
+            <div style={{ color: T.muted, fontSize: 13, fontFamily: "'Nunito Sans'", marginTop: 2 }}>
+              Playing by ear takes longer than reading. Every round counts.
+            </div>
+            <Btn onClick={onExit} style={{ marginTop: 14 }}>Back to the map</Btn>
+          </div>
+        )}
+      </Card>
+      {!done && (
+        <div style={{ marginTop: 14 }}>
+          <Piano lo={lo} hi={hi} pressed={pressed} labels={cfg.labels !== false}
+            press={press} release={release} height={hi - lo > 20 ? 150 : 180} />
         </div>
       )}
     </div>
@@ -2065,6 +2597,11 @@ function FreePlay({ audio, pressed, press, release, register, onExit }) {
       <Piano lo={48} hi={84} pressed={pressed} labels={labels} press={press} release={release} height={180} />
       <div style={{ display: "flex", gap: 10, marginTop: 14, alignItems: "center", flexWrap: "wrap" }}>
         <Btn variant="ghost" onClick={() => setLabels((v) => !v)}>{labels ? "Hide note names" : "Show note names"}</Btn>
+        {song.fing && (
+          <Btn variant="ghost" onClick={() => setShowFing((v) => !v)}>
+            {showFing ? "Hide finger numbers" : "Show finger numbers"}
+          </Btn>
+        )}
         <Btn variant={metro ? "primary" : "ghost"} onClick={() => setMetro((v) => !v)}>{metro ? "Stop metronome" : "Metronome"}</Btn>
         <label style={{ display: "flex", alignItems: "center", gap: 8, color: T.muted, fontFamily: "'DM Mono',monospace", fontSize: 13 }}>
           {bpm} bpm
@@ -2128,16 +2665,24 @@ export default function PianoQuest() {
   const [toast, setToast] = useState(null);
   const register = useRef(() => {});
 
-  const press = useCallback((m, v = 0.8) => {
+  const press = useCallback((m, v = 0.8, silent = false) => {
     setPressed((s) => { const n2 = new Set(s); n2.add(m); return n2; });
-    audio.noteOn(m, v);
+    if (!silent) audio.noteOn(m, v);
     register.current?.(m);
   }, [audio]);
 
-  const release = useCallback((m) => {
+  const release = useCallback((m, silent = false) => {
     setPressed((s) => { const n2 = new Set(s); n2.delete(m); return n2; });
-    audio.noteOff(m);
+    if (!silent) audio.noteOff(m);
   }, [audio]);
+
+  // The mic feeds the very same pipeline as touch / computer keys / MIDI, so
+  // every lesson engine works with a real piano without knowing about it.
+  // Silent, or our own synth would be heard by the mic and loop.
+  const mic = useMic({
+    onNote: (m, v) => press(m, v, true),
+    onOff: (m) => release(m, true),
+  });
 
   const { midiState, connectMidi } = useInput({ onDown: press, onUp: release });
 
@@ -2160,7 +2705,7 @@ export default function PianoQuest() {
   const Engine = lesson && {
     song: SongPlayer, read: ReadDrill, find: FindDrill,
     rhythm: RhythmDrill, improv: ImprovJam, concept: ConceptLesson,
-    guided: GuidedLesson,
+    guided: GuidedLesson, ear: EarDrill,
   }[lesson.kind];
 
   const shared = { audio, pressed, press, release, register, speech };
@@ -2213,6 +2758,7 @@ export default function PianoQuest() {
           <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
             {p.streak > 1 && <Pill icon={"\u{1F525}"} label={`${p.streak}-day streak`} />}
             <Pill icon={"\u26A1"} label={`${p.xp} XP`} />
+            <MicButton mic={mic} compact />
             <button onClick={() => setView({ name: "trophies" })} style={{
               background: T.panel, border: `1px solid ${T.line}`, borderRadius: 10, padding: "7px 12px",
               color: T.ivory, cursor: "pointer", fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 13,
@@ -2242,6 +2788,26 @@ export default function PianoQuest() {
             <Btn variant="ghost" onClick={connectMidi}>Connect MIDI keyboard</Btn>
           </Card>
         )}
+        {view.name === "map" && mic.state !== "on" && (
+          <Card style={{ marginBottom: 22, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", background: T.velvet }}>
+            <span style={{ fontSize: 22 }}>{"\u{1F399}"}</span>
+            <div style={{ flex: 1, minWidth: 210 }}>
+              <div style={{ fontFamily: "'Baloo 2'", fontWeight: 700, fontSize: 15 }}>Got a real piano or keyboard?</div>
+              <div style={{ color: T.muted, fontSize: 13 }}>
+                {mic.state === "denied" ? "Microphone access was blocked. Allow it for this site in your browser settings, then try again."
+                  : mic.state === "unsupported" ? "This browser can't reach the microphone."
+                    : mic.state === "error" ? "The microphone wouldn't start. Check nothing else is using it."
+                      : "Let the app listen through the microphone and play on the real thing. Works on the iPad. " + MIC_NOTE}
+              </div>
+            </div>
+            <MicButton mic={mic} />
+          </Card>
+        )}
+        {view.name === "map" && mic.state === "on" && (
+          <div style={{ marginBottom: 18, color: T.mint, fontFamily: "'DM Mono',monospace", fontSize: 12 }}>
+            {"\u25CF"} Listening to your piano {"\u00B7"} {MIC_NOTE}
+          </div>
+        )}
         {view.name === "map" && midiState === "ok" && (
           <div style={{ marginBottom: 18, color: T.mint, fontFamily: "'DM Mono',monospace", fontSize: 12 }}>
             {"\u25CF"} MIDI keyboard connected
@@ -2262,6 +2828,19 @@ export default function PianoQuest() {
             onComplete={handleComplete(lesson.id)} onExit={back} />
         ) : null}
 
+        {(view.name === "lesson" || view.name === "free") && mic.state === "on" && (
+          <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, color: T.mint }}>{"\u25CF"} listening</span>
+            <span style={{ fontFamily: "'Baloo 2'", fontWeight: 800, fontSize: 20, color: mic.heard != null ? T.brass : T.line, minWidth: 52 }}>
+              {mic.heard != null ? noteName(mic.heard) + (Math.floor(mic.heard / 12) - 1) : "\u2014"}
+            </span>
+            {lesson && lesson.kind === "find" && lesson.find?.together && (
+              <span style={{ color: T.danger, fontSize: 13, fontFamily: "'Nunito Sans'" }}>
+                This one is a chord {"\u2014"} tap the keys on screen instead.
+              </span>
+            )}
+          </div>
+        )}
         {(view.name === "lesson" || view.name === "free") && (
           <div style={{ marginTop: 22, color: "#6f6088", fontSize: 12, fontFamily: "'DM Mono',monospace", lineHeight: 1.7 }}>
             No piano handy? Right hand: A S D F G H J K (white) {"\u00B7"} W E T Y U (black) {"\u00B7"} Left hand: Z X C V B N M

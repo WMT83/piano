@@ -56,17 +56,15 @@ console.log(`app.js: ${(size / 1024).toFixed(0)} kB`);
 for (const f of await fs.readdir("public")) {
   await fs.copyFile(path.join("public", f), path.join(OUT, f));
 }
+// Stamp the build into the cache name. Without this, sw.js is byte-identical
+// between builds, the browser never reinstalls the service worker, and the
+// iPad keeps serving the OLD cached app forever — redeploying cannot fix it.
+const appJs = await fs.readFile(path.join(OUT, "app.js"));
+const buildId = createHash("md5").update(appJs).digest("hex").slice(0, 8);
 let sw = await fs.readFile(path.join(OUT, "sw.js"), "utf8");
-// Version the cache by the app.js hash so every content change ships a new
-// service worker. Without this the SW is byte-identical between builds, the
-// browser never reinstalls it, and the iPad serves a stale app forever.
-const buildId = createHash("md5")
-  .update(await fs.readFile(path.join(OUT, "app.js")))
-  .digest("hex").slice(0, 8);
-sw = sw
-  .replace("self.__FONTS__ || []", JSON.stringify(fontFiles))
-  .replace("__BUILD_ID__", buildId);
+sw = sw.replace("self.__FONTS__ || []", JSON.stringify(fontFiles))
+       .replace('"piano-quest-v1"', JSON.stringify("piano-quest-" + buildId));
 await fs.writeFile(path.join(OUT, "sw.js"), sw);
-console.log(`sw cache: piano-quest-${buildId}`);
+console.log(`build id: ${buildId} (cache name piano-quest-${buildId})`);
 
 console.log("build complete -> dist/");

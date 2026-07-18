@@ -7,7 +7,22 @@ createRoot(document.getElementById("root")).render(<PianoQuest />);
 // Register the service worker so the app opens with no internet at all.
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    navigator.serviceWorker.register("./sw.js").then((reg) => {
+      // A new build has taken over: reload once so she gets it immediately
+      // instead of on some later launch.
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+      reg.addEventListener("updatefound", () => {
+        const sw = reg.installing;
+        if (sw) sw.addEventListener("statechange", () => {
+          if (sw.state === "installed" && navigator.serviceWorker.controller) sw.postMessage("skipWaiting");
+        });
+      });
+    }).catch(() => {});
   });
 }
 

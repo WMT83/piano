@@ -1,11 +1,15 @@
 /* Cache everything on install, then serve from cache first.
    Result: after one visit, Piano Quest opens with no internet at all. */
-const CACHE = "piano-quest-__BUILD_ID__";
+const CACHE = "piano-quest-v1";
 const ASSETS = [
   "./", "./index.html", "./app.js", "./fonts.css",
   "./manifest.webmanifest",
   "./icon-180.png", "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png",
 ];
+
+self.addEventListener("message", (e) => {
+  if (e.data === "skipWaiting") self.skipWaiting();
+});
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
